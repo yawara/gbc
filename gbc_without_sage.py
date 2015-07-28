@@ -1,22 +1,23 @@
-from sage.all import *
 from itertools import product
 import numpy as np
 import networkx as nx
 import igraph as ig
+import pyprimes
 
 from common import nx_to_ig, diameter, attributes, show
 
-def gbc(R):
+
+def gbc(n):
   lines = []
   lines.append((0,0,0))
   
-  for p,q,r in product(R, repeat=3):
+  for p,q,r in product(range(n), repeat=3):
     flag = True
-    for k in R:
+    for k in range(n):
       if k == 0:
         pass
       else:
-        if (k*p,k*q,k*r) in lines:
+        if ((k*p)%n,(k*q)%n,(k*r)%n) in lines:
           flag = False
           break
     if flag:
@@ -30,7 +31,23 @@ def gbc(R):
   for i, l1 in enumerate(lines):
     for j, l2 in enumerate(lines):
       if i < j:
-        if np.array(l1).dot(np.array(l2)) == 0:
+        if (np.array(l1).dot(np.array(l2)))%n == 0:
           G.add_edge(l1, l2)
 
   return G
+
+
+def order(n):
+  rtv = n**2
+  for (p,_) in pyprimes.factorise(n):
+    rtv *= 1 + 1/p + 1/p**2
+  return round(rtv)
+
+def degree(n):
+  rtv = n
+  for (p,_) in pyprimes.factorise(n):
+    rtv *=  1 + 1/p 
+  return round(rtv)
+
+def pair(n):
+  return order(n),degree(n)

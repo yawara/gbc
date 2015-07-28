@@ -6,16 +6,26 @@ import igraph as ig
 
 from common import nx_to_ig, diameter, attributes, show
 
-def gbc_mat(M):
+A = QuaternionAlgebra(GF(3),-1,-1)
+i, j, k = A.gens()
+
+def quaternion_iter(A):
+  i,j,k = A.gens()
+  R = A.base_ring()
+  
+  for a,b,c,d in product(R,repeat=4):
+    yield a+b*i+c*j+d*k
+  
+def gbc_quaternion(A):
   lines = []
   lines.append(((0,0,0),(0,0,0)))
   
-  V = product(M, repeat=3)
+  V = product(quaternion_iter(A), repeat=3)
   
   for (p,q,r), (s,t,u) in product(V, repeat=2):
     
     flag = True
-    for k1, k2 in product(M, repeat=2):
+    for k1, k2 in product(quaternion_iter(A), repeat=2):
       if k1 == 0 and k2 == 0:
         pass
       else:
@@ -23,8 +33,6 @@ def gbc_mat(M):
           flag = False
           break
     if flag:
-      for x in [p,q,r,s,t,u]:
-        x.set_immutable()
       lines.append(((p,q,r),(s,t,u)))
 
   lines.remove(((0,0,0),(0,0,0)))
