@@ -6,6 +6,13 @@ import igraph as ig
 
 from common import nx_to_ig, diameter, attributes, show
 
+n = 2
+R = Zmod(n)
+P = PolynomialRing(R,'x')
+x = P.gen()
+f = x**2 + 1
+Q = P.quotient(f)
+
 def iter_q(Q,star=False):
   if not star:
     yield 0
