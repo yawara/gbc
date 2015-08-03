@@ -1,8 +1,6 @@
 from sage.all import *
 from itertools import product
-import numpy as np
 import networkx as nx
-import igraph as ig
 
 from common import nx_to_ig, diameter, attributes, show
 
@@ -30,7 +28,7 @@ def gbc(R):
   for i, l1 in enumerate(lines):
     for j, l2 in enumerate(lines):
       if i < j:
-        if np.array(l1).dot(np.array(l2)) == 0:
+        if l1[0]*l2[0]+l1[1]*l2[1]+l1[2]*l2[2] == 0:
           G.add_edge(l1, l2)
 
   return G
