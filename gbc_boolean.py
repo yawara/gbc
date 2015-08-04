@@ -18,12 +18,13 @@ def BooleanRing(n, p=2):
 def iter_b(B, star=False):
   gens = B.gens()
   
-  n = len(gens)
+  n = len(gens) + 1
+  basis = [1] + list(gens)
   
   for x in product(B.base_ring(),repeat=n):
     tmp = 0
     for i in range(n):
-      tmp += x[i]*gens[i]
+      tmp += x[i]*basis[i]
     if tmp == 0:
       if not star:
         yield 0
