@@ -1,5 +1,6 @@
 from sage.all import *
 from itertools import product
+from collections import defaultdict
 import networkx as nx
 
 from common import nx_to_ig, diameter, attributes, show
@@ -33,20 +34,25 @@ def iter_b(B, star=False):
 
 def gbc_boolean(B):
   lines = []
-  lines.append((0,0,0))
+  check_table = defaultdict(bool)
   
   for p,q,r in product(iter_b(B), repeat=3):
-    flag = True
-    for k in iter_b(B,star=True):
-      if (k*p, k*q, k*r) in lines:
-        flag = False
-        break
-    if flag:
-      lines.append((p,q,r))
-
-  lines.remove((0,0,0))
+    if p == 0 and q == 0 and r == 0:
+      pass
+    else:
+      flag = True
+      if not check_table[(p,q,r)]:
+        for k in iter_b(B, star=True):
+          kp, kq, kr = k*p, k*q, k*r 
+          if kp == 0 and kq == 0 and kr == 0:
+            flag = False
+          else:
+            check_table[(kp,kq,kr)] = True
+        if flag:
+          lines.append((p,q,r))  
   
   G = nx.Graph()
+  G.add_nodes_from(lines)
   
   for i, l1 in enumerate(lines):
     for j, l2 in enumerate(lines):
