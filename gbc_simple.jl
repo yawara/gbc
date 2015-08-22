@@ -3,7 +3,7 @@ import DataStructures.DefaultDict
 using Graphs
 
 function gbc(n::Int)
-  lines = (Int,Int,Int)[]
+  lines = Vector{Int}[]
   check_table = DefaultDict(false)
 
   for (p, q, r) in product(0:(n-1), 0:(n-1), 0:(n-1))
@@ -15,17 +15,17 @@ function gbc(n::Int)
           check_table[(kp, kq, kr)] = true
           if (kp, kq, kr) == (0, 0, 0); flag = false end
         end
-        if flag; push!(lines, (p, q, r)) end
+        if flag; push!(lines, [p, q, r]) end
       end
     end
   end
 
-  g = graph(lines, Edge{(Int,Int,Int)}[], is_directed = false)
+  g = graph(lines, Edge{Vector{Int}}[], is_directed = false)
 
   for (i, l1) in enumerate(lines)
     for (j, l2) in enumerate(lines)
       if i < j
-        if (l1[1]*l2[1]+l1[2]*l2[2]+l1[3]*l2[3])%n == 0
+        if (dot(l1,l2))%n == 0
           add_edge!(g, l1, l2)
         end
       end

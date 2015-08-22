@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import networkx as nx
 import igraph as ig
 
@@ -16,7 +17,21 @@ def diameter(G):
 
 def attributes(G):
   ig_G = nx_to_ig(G)
-  return len(G),tuple(set(G.degree().values())),diameter(G)
+  ldegs = list(set(G.degree().values()))
+  ldegs.sort()
+  return len(G),tuple(ldegs),diameter(G)
 
 def show(G):
   print(attributes(G))
+  
+def remove_nodes_deg(g, d):
+  degs = g.degree().copy()
+  ns = g.nodes().copy()
+  
+  for v in ns:
+    if degs[v] == d:
+      g.remove_node(v)
+      
+def draw(g):
+  nx.draw(g)
+  plt.show()
