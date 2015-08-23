@@ -24,7 +24,25 @@ def lines(n):
         lines.append((p,q,r))
   
   return lines
+
+def nondegenerate_lines(n):
+  lines = []
+  check_table = defaultdict(bool)
+
+  for p,q,r in product(range(n), repeat=3):
+    if p == 0 and q == 0 and r == 0:
+      pass
+    else:
+      if not check_table[(p,q,r)]:
+        for k in range(1,n):
+          if coprime(k, n):
+            kp, kq, kr = (k*p)%n, (k*q)%n, (k*r)%n 
+            check_table[(kp,kq,kr)] = True
+        if (p**2+q**2+r**2)%n != 0:
+          lines.append((p,q,r))
   
+  return lines
+
 def nodes(n):
   rtv = []
   check_table = defaultdict(bool)
