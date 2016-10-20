@@ -21,9 +21,6 @@ def gbc(R):
                         pass
                     else:
                         kp, kq, kr = k * p, k * q, k * r
-                        kp.set_immutable()
-                        kq.set_immutable()
-                        kr.set_immutable()
                         if kp == 0 and kq == 0 and kr == 0:
                             flag = False
                         else:
